@@ -43,7 +43,7 @@ class UsersController extends Controller
         event(new App\Events\UserCreated($user));
 
 
-        return $this->respondCreated('가입하신 메일 계정으로 가입 확인 메일을 보내드렸습니다 가입 확인하시고 로그인해 주세요.')
+        return $this->respondCreated('가입하신 메일 계정으로 가입 확인 메일을 보내드렸습니다 가입 확인하시고 로그인해 주세요.');
 
     }
 
@@ -66,8 +66,7 @@ class UsersController extends Controller
 
     protected function respondCreated($message){
         flash($message);
-        return redirect('/');
+        return redirect('/home');
     }
-
 
 }
