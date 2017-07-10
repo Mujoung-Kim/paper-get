@@ -19,6 +19,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('mail', function(){
+    $article = 'HIHIHIHIHIHIHHI';
+    return Mail::send(
+        'emails.articles.created',compact('article'),function ($message) use ($article){
+            $message->to('kwonmory@gmail.com');
+            $message->subject('HIHIHIHIHIHIHIHIH22');
+    }
+    );
+});
+
 Route::get('/home', function (){
     return view('layouts.app');
 });
