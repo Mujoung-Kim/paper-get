@@ -20,6 +20,16 @@ class UsersController extends Controller
             'password' => 'required|confirmed|min:5',
         ]);
 
+        $user = \App\User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+        ]);
+
+        auth()->login($user);
+        flash(auth()->user()->name . '님 환영합니다 ');
+
+        return redirect('home');
 
     }
 
