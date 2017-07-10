@@ -7,6 +7,12 @@ use App;
 
 class UsersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     public function create(){
         return view('users.create');
     }
@@ -30,16 +36,14 @@ class UsersController extends Controller
             'confirm_code' => $confirmCode,
         ]);
 
-        \Mail::send('emails.auth.confirm',compact('user'), function ($message) use ($user){
-            $message->to($user->email);
-            $message->subject(sprintf('[%s] 회원 가입을 확인해주세요', config('app.name')));
-        });
+//        \Mail::send('emails.auth.confirm',compact('user'), function ($message) use ($user){
+//            $message->to($user->email);
+//            $message->subject(sprintf('[%s] 회원 가입을 확인해주세요', config('app.name')));
+//        });
+        event(new App\Events\UserCreated($user));
 
-//        auth()->login($user);
-//        flash(auth()->user()->name . '님 환영합니다 ');
-        flash('가입하신 메일 계정으로 가입 확인 메일을 보내드렸습니다 가입 확인하시고 로그인해 주세요.');
 
-        return redirect('/home');
+        return $this->respondCreated('가입하신 메일 계정으로 가입 확인 메일을 보내드렸습니다 가입 확인하시고 로그인해 주세요.')
 
     }
 
@@ -58,6 +62,11 @@ class UsersController extends Controller
         auth()->login($user);
         flash(auth()->user()->name . '님, 환영합니다 가입이 완료되었습니다. ');
         return redirect('home');
+    }
+
+    protected function respondCreated($message){
+        flash($message);
+        return redirect('/');
     }
 
 
